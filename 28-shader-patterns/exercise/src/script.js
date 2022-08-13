@@ -20,14 +20,13 @@ const scene = new THREE.Scene()
 /**
  * Test mesh
  */
-// Geometry
-const geometry = new THREE.PlaneGeometry(1, 1, 32, 32)
+// Cube
+const geometry = new THREE.BoxGeometry(1, 1, 1)
 
 // Material
 const material = new THREE.ShaderMaterial({
     vertexShader: testVertexShader,
-    fragmentShader: testFragmentShader,
-    side: THREE.DoubleSide
+    fragmentShader: testFragmentShader
 })
 
 // Mesh
@@ -62,7 +61,7 @@ window.addEventListener('resize', () =>
  */
 // Base camera
 const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height, 0.1, 100)
-camera.position.set(0.25, - 0.25, 1)
+camera.position.set(0.25, - 0.25, 4)
 scene.add(camera)
 
 // Controls
