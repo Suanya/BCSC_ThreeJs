@@ -79,7 +79,6 @@ module.exports = {
             },
             
             // Shaders
-            /*
             {
                 test: /\.(glsl|vs|fs|vert|frag)$/,
                 type: 'asset/source',
@@ -88,21 +87,17 @@ module.exports = {
                         filename: 'assets/images/[hash][ext]'
                     }
             }
-            */
-
-            // Shaders
-            
-            {
-                test: /\.(glsl|vs|fs|vert|frag)$/,
-                exclude: /node_modules/,
-                use: [
-                    'raw-loader'
-                ]
-            }
-            
-             
         ]
     }
 }
 
-
+// Shaders
+/* old way
+{
+    test: /\.(glsl|vs|fs|vert|frag)$/,
+    exclude: /node_modules/,
+    use: [
+        'raw-loader'
+    ]
+}
+*/

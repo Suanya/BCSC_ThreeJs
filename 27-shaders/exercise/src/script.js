@@ -5,7 +5,7 @@ import * as dat from 'lil-gui'
 import testVertexShader from './shader/test/vertex.glsl'
 import testFragmentShader from './shader/test/fragment.glsl'
 
-
+console.log(testVertexShader)
 
 
 /**
@@ -30,30 +30,25 @@ const textureLoader = new THREE.TextureLoader()
  */
 // Geometry
 const geometry = new THREE.PlaneGeometry(1, 1, 32, 32)
+// const geometry = new THREE.PlanePufferGeometry(1,1,32,32)
+
+const count = geometry.attributes.position.count
+const randoms = new Float32Array(count)
+
+for(let i = 0; i < count; i++)
+{
+    randoms[i] = Math.random()
+}
+
+geometry.setAttribute('aRandom', new THREE.BufferAttribute(randoms, 1))
 
 // Material
 const material = new THREE.RawShaderMaterial({
-    vertexShader: `
-    uniform mat4 projectionMatrix;
-uniform mat4 viewMatrix;
-uniform mat4 modelMatrix;
-
-attribute vec3 position;
-
-void main()
-{
-    gl_Position = projectionMatrix * viewMatrix * modelMatrix * vec4(position, 1.0);
-}
-    `,
-   
-    fragmentShader: `
-    precision mediump float;
-
-void main()
-{
-    gl_FragColor = vec4(1.0, 1.0, 0.0, 1.0);
-}
-    `
+    vertexShader: testVertexShader,
+    fragmentShader: testFragmentShader,
+    // wireframe: true
+    side : THREE.DoubleSide
+    
 })
 
 // Mesh
