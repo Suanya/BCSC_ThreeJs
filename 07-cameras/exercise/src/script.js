@@ -1,71 +1,88 @@
 import './style.css'
 import * as THREE from 'three'
-
-/**
- * Cursor
- */
-const cursor = {
-    x: 0,
-    y: 0
-}
-window.addEventListener(('mousemove'), (event) =>
-{
-    cursor.x = -(event.clientX / sizes.width - 0.5)
-    cursor.y = +(event.clientY / sizes.height - 0.5)
-})
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
+import vertexShader from './shaders/vertex.glsl'
+import fragmentShader from './shaders/fragment.glsl'
 
 /**
  * Base
  */
+// Debug
+//const gui = new dat.GUI()
+
 // Canvas
 const canvas = document.querySelector('canvas.webgl')
-
-// Sizes
-const sizes = {
-    width: 800,
-    height: 600
-}
 
 // Scene
 const scene = new THREE.Scene()
 
-// Object
-const mesh = new THREE.Mesh(
-    new THREE.BoxGeometry(1, 1, 1, 5, 5, 5),
-    new THREE.MeshBasicMaterial({ color: 0xffff00 })
-)
+/**
+ * Test mesh
+ */
+// Cube
+const geometry = new THREE.BoxGeometry(1, 1, 1)
+
+// Material
+const material = new THREE.ShaderMaterial({
+    vertexShader: vertexShader,
+    fragmentShader: fragmentShader
+})
+
+// Mesh
+const mesh = new THREE.Mesh(geometry, material)
 scene.add(mesh)
 
-// Camera
+/**
+ * Sizes
+ */
+const sizes = {
+    width: window.innerWidth,
+    height: window.innerHeight
+}
+
+window.addEventListener('resize', () =>
+{
+    // Update sizes
+    sizes.width = window.innerWidth
+    sizes.height = window.innerHeight
+
+    // Update camera
+    camera.aspect = sizes.width / sizes.height
+    camera.updateProjectionMatrix()
+
+    // Update renderer
+    renderer.setSize(sizes.width, sizes.height)
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
+})
+
+/**
+ * Camera
+ */
+// Base camera
 const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height, 0.1, 100)
-
-// camera.position.x = 2
-// camera.position.y = 2
-camera.position.z = 3
-
-camera.lookAt(mesh.position)
+camera.position.set(0.25, - 0.25, 4)
 scene.add(camera)
-// Renderer
+
+// Controls
+const controls = new OrbitControls(camera, canvas)
+controls.enableDamping = true
+
+/**
+ * Renderer
+ */
 const renderer = new THREE.WebGLRenderer({
     canvas: canvas
 })
 renderer.setSize(sizes.width, sizes.height)
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 
-// Animate
-const clock = new THREE.Clock()
-
+/**
+ * Animate
+ */
 const tick = () =>
 {
-    const elapsedTime = clock.getElapsedTime()
-
-    // Update objects
-    // mesh.rotation.y = elapsedTime;
-    
-    // Update camera
-    camera.position.x = Math.sin(cursor.x * Math.PI * 2) * 3
-    camera.position.z = Math.cos(cursor.x * Math.PI * 2 ) * 3
-    camera.position.y = cursor.y * 6
-    camera.lookAt(mesh.position)
+    // Update controls
+    controls.update()
 
     // Render
     renderer.render(scene, camera)
