@@ -60,7 +60,7 @@ const tick = () =>
     const elapsedTime = clock.getElapsedTime()
     
     // Update Cube
-    mesh.rotation.y = elapsedTime * 0.2
+    mesh.rotation.y += elapsedTime * 0.2
     
     // Render
     renderer.render(scene, camera)
