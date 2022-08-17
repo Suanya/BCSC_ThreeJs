@@ -2,6 +2,31 @@ import './style.css'
 import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 import gsap from 'gsap'
+import GUI from 'lil-gui'
+
+/**
+ * Debug GUI
+ */
+const gui = new GUI();
+
+const parameters = {
+    color: 0xffff00,
+    spin: () =>
+    {
+        gsap.to(mesh.rotation, { duration: 1, y: mesh.rotation.y + Math.PI * 4.2 })
+    }
+}
+
+// Hide Control GUI
+gui.hide()
+window.addEventListener('keydown', (event) => {
+    if (event.key === 'h') 
+    {
+        if (gui._hidden)
+            gui.show()
+        else gui.hide()
+    }
+})
 
 /**
  * Base
@@ -13,12 +38,27 @@ const canvas = document.querySelector('canvas.webgl')
 const scene = new THREE.Scene()
 
 /**
- * Object
+ * Cube
  */
 const geometry = new THREE.BoxGeometry(1, 1, 1)
-const material = new THREE.MeshBasicMaterial({ color: 0xff0000 })
+const material = new THREE.MeshBasicMaterial({ color: parameters.color })
 const mesh = new THREE.Mesh(geometry, material)
 scene.add(mesh)
+
+// Debug Cube
+gui.add(mesh.position, 'x').min(-3).max(3).step(0.01).name('left / right')
+gui.add(mesh.position, 'y').min(-3).max(3).step(0.01).name('up / down')
+gui.add(mesh.position, 'z').min(-3).max(3).step(0.01).name('vor / zurück')
+
+gui.add(mesh, 'visible')
+gui.add(material, 'wireframe')
+
+gui.addColor(parameters, 'color').onChange(() =>
+{
+    material.color.set(parameters.color)
+})
+
+gui.add(parameters, 'spin')
 
 /**
  * Sizes
