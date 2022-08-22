@@ -76,13 +76,19 @@ const renderer = new THREE.WebGLRenderer({
 renderer.setSize(sizes.width, sizes.height)
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 
+// Clock
+const clock = new THREE.Clock()
+
 /**
  * Animate
  */
 const tick = () =>
 {
-    // Update controls
-    controls.update()
+    // Clock 
+    const elapsedTime = clock.getElapsedTime()
+
+    // Update Cube
+    mesh.rotation.y += elapsedTime * 0.2
 
     // Render
     renderer.render(scene, camera)

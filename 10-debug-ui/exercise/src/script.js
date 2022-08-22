@@ -18,7 +18,7 @@ const parameters = {
 }
 
 // Hide Control GUI
-gui.hide()
+// gui.hide()
 window.addEventListener('keydown', (event) => {
     if (event.key === 'h') 
     {
